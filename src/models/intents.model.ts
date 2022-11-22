@@ -12,6 +12,14 @@ export type Intent = BaseModel & {
       }
     ]
   ];
-  followUpQuestions: string[];
+  followUpQuestions: [
+    [
+      {
+        type: string;
+        text: string;
+        tag?: string;
+      }
+    ]
+  ];
   userId: BaseModel['_id'];
 };
