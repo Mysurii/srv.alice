@@ -7,7 +7,7 @@ import { sendError } from '../utils/endpoint-utils';
 
 export const IntentsController: Router = Router();
 
-const intentsRepository = new IntentsRepository('intent');
+const intentsRepository = new IntentsRepository();
 
 // Adding and updating an intent use the same repo function
 IntentsController.post('/:userId', addOrUpdate).put('/:userId', addOrUpdate);

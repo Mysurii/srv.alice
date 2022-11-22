@@ -1,3 +1,5 @@
+import type { Customization } from './../models/customization.model';
+import { INITIAL_CUSTOMIZATION } from './../models/customization.model';
 import { getUser, HTTP_STATUS, sendResponse } from './../utils/endpoint-utils';
 import type { Request, Response } from 'express';
 import type { User } from './../models/user.model';
@@ -11,9 +13,11 @@ import Logger from '../utils/Logger';
 import { env_variables } from '../config';
 import { createAccessToken, createRefreshToken } from '../utils/jwt';
 import axios from 'axios';
+import CustomizationRepository from '../repositories/customization.repository';
 
 const userController = Router();
 const userRepository = new UserRepository();
+const customizationRepository = new CustomizationRepository();
 
 userController.post('/register', async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
@@ -44,8 +48,14 @@ userController.post('/register', async (req: Request, res: Response) => {
     if (success) {
       const user = await userRepository.getUserByEmail(newUser.email!);
       if (user) {
-        const response = await axios.get(`${env_variables.CHATBOT_API}/intents/${user?._id}`);
-        console.log(response);
+        const initial = INITIAL_CUSTOMIZATION as Customization;
+        initial.userId = user._id;
+        await customizationRepository.addCustomization(initial);
+        try {
+          await axios.get(`${env_variables.CHATBOT_API}/intents/${user?._id}`);
+        } catch (err) {
+          Logger.log('Could not save basic intents');
+        }
       }
     }
   } catch (err) {
@@ -122,7 +132,7 @@ userController.post('/validate', async (req: Request, res: Response) => {
 
   if (!user) return sendError(res, HTTP_STATUS.BAD, 'User not logged in');
 
-  return sendResponse(res, HTTP_STATUS.OK, 'user logged in');
+  return sendResponse(res, HTTP_STATUS.OK, { user });
 });
 
 export default userController;

@@ -6,7 +6,7 @@ import { env_variables } from '../config';
 import type { ID } from '../models/base.model';
 import Logger from '../utils/Logger';
 
-type availableRepos = 'user' | 'intent';
+type availableRepos = 'user' | 'intent' | 'customization';
 
 interface IRead<T> {
   findById: (id: string) => Promise<T | null>;
@@ -57,7 +57,7 @@ export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     }
   }
 
-  async update(id: ID, item: T): Promise<boolean> {
+  async update(id: ID, item: Partial<T>): Promise<boolean> {
     try {
       await this.collection.replaceOne({ _id: this.parseId(id) }, item as UpdateFilter<Document>);
       return true;

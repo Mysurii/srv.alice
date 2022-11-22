@@ -4,6 +4,10 @@ import type { Intent } from '../models/intents.model';
 import Repository from './base.repository';
 
 export default class IntentsRepository extends Repository<Intent> {
+  constructor() {
+    super('intent');
+  }
+
   public async findByUserId(userId: ID): Promise<Intent[]> {
     let intents: Intent[] = [];
     try {
