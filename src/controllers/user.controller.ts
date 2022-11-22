@@ -1,4 +1,4 @@
-import { HTTP_STATUS, sendResponse } from './../utils/endpoint-utils';
+import { getUser, HTTP_STATUS, sendResponse } from './../utils/endpoint-utils';
 import type { Request, Response } from 'express';
 import type { User } from './../models/user.model';
 import jwt from 'jsonwebtoken';
@@ -106,10 +106,23 @@ userController.post('/login', async (req: Request, res: Response) => {
   const tokens = {
     accessToken,
     refreshToken,
-    role: user.role,
-    id: user._id,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
   };
   sendResponse(res, HTTP_STATUS.OK, tokens);
+});
+
+userController.post('/validate', async (req: Request, res: Response) => {
+  const user = getUser(req);
+  console.log(user);
+
+  if (!user) return sendError(res, HTTP_STATUS.BAD, 'User not logged in');
+
+  return sendResponse(res, HTTP_STATUS.OK, 'user logged in');
 });
 
 export default userController;
