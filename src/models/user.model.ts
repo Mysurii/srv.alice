@@ -17,9 +17,6 @@ export type User = BaseModel &
   LoginRequest & {
     name: string;
     role: Role;
-    street: string;
-    housenumber: number;
-    city: string;
     tokens: {
       accessToken: string;
       refreshToken: string;

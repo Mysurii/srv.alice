@@ -10,14 +10,15 @@ import { compare, hash } from 'bcrypt';
 import Logger from '../utils/Logger';
 import { env_variables } from '../config';
 import { createAccessToken, createRefreshToken } from '../utils/jwt';
+import axios from 'axios';
 
 const userController = Router();
 const userRepository = new UserRepository();
 
 userController.post('/register', async (req: Request, res: Response) => {
-  const { email, password, name, housenumber, street, city } = req.body;
+  const { email, password, name } = req.body;
 
-  if (!email || !password || !name || !housenumber || !street || !city) return sendError(res, HTTP_STATUS.BAD, 'Please provide all the fields required');
+  if (!email || !password || !name) return sendError(res, HTTP_STATUS.BAD, 'Please provide all the fields required');
 
   if (!validator.isEmail(email)) return sendError(res, HTTP_STATUS.BAD, 'Email is not valid');
 
@@ -38,7 +39,15 @@ userController.post('/register', async (req: Request, res: Response) => {
   };
 
   try {
-    userRepository.addUser(newUser);
+    const success = await userRepository.addUser(newUser);
+
+    if (success) {
+      const user = await userRepository.getUserByEmail(newUser.email!);
+      if (user) {
+        const response = await axios.get(`${env_variables.CHATBOT_API}/intents/${user?._id}`);
+        console.log(response);
+      }
+    }
   } catch (err) {
     Logger.error(err);
     return sendError(res, HTTP_STATUS.INTERNAL_SERVER, 'Something went wrong while trying to create accout');
@@ -98,6 +107,7 @@ userController.post('/login', async (req: Request, res: Response) => {
     accessToken,
     refreshToken,
     role: user.role,
+    id: user._id,
   };
   sendResponse(res, HTTP_STATUS.OK, tokens);
 });

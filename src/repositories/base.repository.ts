@@ -6,7 +6,7 @@ import { env_variables } from '../config';
 import type { ID } from '../models/base.model';
 import Logger from '../utils/Logger';
 
-type availableRepos = 'user' | 'product' | 'order';
+type availableRepos = 'user' | 'intent';
 
 interface IRead<T> {
   findById: (id: string) => Promise<T | null>;

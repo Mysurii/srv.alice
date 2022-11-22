@@ -2,8 +2,11 @@ import type { Db } from 'mongodb';
 import { MongoClient } from 'mongodb';
 import Logger from './utils/Logger';
 
-const { PORT, ID_TYPE, DATABASE_URL, DATABASE_NAME, DATABASE_CONNECTION_TIMEOUT, JWT_SECRET, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } = process.env;
+const { PORT, ID_TYPE, DATABASE_URL, DATABASE_NAME, DATABASE_CONNECTION_TIMEOUT, JWT_SECRET, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION, CHATBOT_API } = process.env;
 
+if (CHATBOT_API === undefined) {
+  throw Error('chatbot api not set!');
+}
 if (DATABASE_NAME === undefined || DATABASE_URL === undefined || DATABASE_CONNECTION_TIMEOUT === undefined) {
   throw Error('Database variables not set!');
 }
@@ -19,6 +22,7 @@ if (typeof ID_TYPE === 'undefined' || (ID_TYPE !== 'ObjectID' && ID_TYPE !== 'UU
 export const env_variables = {
   PORT: PORT ? parseInt(PORT) : 8080,
   DATABASE: { url: DATABASE_URL, name: DATABASE_NAME, timeout: parseInt(DATABASE_CONNECTION_TIMEOUT) },
+  CHATBOT_API,
   TOKENS: {
     secret: JWT_SECRET,
     atExpiration: parseInt(ACCESS_TOKEN_EXPIRATION),
