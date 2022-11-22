@@ -1,0 +1,52 @@
+{
+  "name": "nodejs-express-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "",
+    "dev": "nodemon ./src/server.ts",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mysurii/NodeJS-Express-template.git"
+  },
+  "author": "Ali Ozcan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mysurii/NodeJS-Express-template/issues"
+  },
+  "homepage": "https://github.com/Mysurii/NodeJS-Express-template#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.11.0",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/chalk": "^2.2.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "@types/express-rate-limit": "^6.0.0",
+    "@types/helmet": "^4.0.0",
+    "@types/jest": "^27.0.2",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/node": "^16.10.1",
+    "@types/validator": "^13.7.10",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "jest": "^27.2.2",
+    "nodemon": "^2.0.13",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.8.4"
+  }
+}
